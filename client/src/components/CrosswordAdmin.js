@@ -118,7 +118,14 @@ class CrosswordAdmin extends React.Component {
 
     async componentDidMount() {
         let token = getCookie("jwt_access");
-        await this.props.getUser(token);
+        let id = getCookie('customerID');
+        if(token) {
+            try {
+                await this.props.getUser(id, token);
+            } catch(err) {
+                return window.location.replace(`${baseURL}`)
+            }
+        }
         if(this.props.user.isAdmin) {
             try {
         await this.props.getCrossword(this.props.match.params.id);
@@ -367,12 +374,14 @@ class CrosswordAdmin extends React.Component {
                 </div>
                 <div className="under-table-container">
             <div className="questions-container flex">
-                <div><h4>ACROSS</h4>
+                <div className="margin flex column"><h4 className="questions">ACROSS</h4>
                 <QuestionsAcross showRange={this.showRange} questions={this.state.questions}/>
                 </div>
-                <div><h4>DOWN</h4>
+                
+                <div className="margin flex column"><h4 className="questions">DOWN</h4>
                 <QuestionsDown showRange={this.showRange} questions={this.state.questions}/>
                 </div>
+                
             </div>
             <div className="solution-container">
                 <table className="table">

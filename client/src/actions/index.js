@@ -2,13 +2,13 @@ import apis from '../apis/index';
 import { setCookie } from '../js';
 import { baseURL } from '../apis'
 
-export const getUser = (token) => async dispatch => {
-    let response = await apis.get('user/singleuser', {headers: {token: token}});
+export const getUser = (id, token) => async dispatch => {
+    let response = await apis.get(`user/singleuser/${id}`, {headers: {token: token}});
     dispatch({type: 'GET_USER', payload: response.data});
 }
 
-export const getUserById = (id) => async dispatch => {
-    let response = await apis.get(`user/id/${id}`);
+export const getUserById = (id, token) => async dispatch => {
+    let response = await apis.get(`user/id/${id}`, {headers: {token: token}});
     dispatch({type: 'GET_USER_BY_ID', payload: response.data});
 }
 
@@ -17,8 +17,8 @@ export const getAdmins = (token) => async dispatch => {
     dispatch({type: 'GET_ADMINS', payload: response.data});
 }
 
-export const getUsersByQuery = (query) => async dispatch => {
-    let response = await apis.get(`user/query/${query}`);
+export const getUsersByQuery = (query, token) => async dispatch => {
+    let response = await apis.get(`user/query/${query}`, {headers: {token: token}});
     dispatch({type: 'GET_USERS_BY_QUERY', payload: response.data})
 }
 
@@ -34,8 +34,8 @@ export const userSignOut = () => async dispatch => {
     setCookie('jwt_access', "", 0.00001);
 }
 
-export const userUpdate = (login, email, currentPassword, token) => async dispatch => {
-    let response = await apis.put('user/update', {login, email, currentPassword}, {headers: {token: token}});
+export const userUpdate = (login, email, currentPassword, id, token) => async dispatch => {
+    let response = await apis.put(`user/update/${id}`, {login, email, currentPassword}, {headers: {token: token}});
     dispatch({type: 'UPDATE_USER', payload: response.data});
 }
 
@@ -64,8 +64,8 @@ export const manageAdmin = (userID, password, token, action) => async dispatch =
     dispatch({type: 'APPOINT_ADMIN', payload: response.data});
 }
 
-export const passwordUpdate = (newPassword, confirmNewPassword, currentPassword, token) => async dispatch => {
-    let response = await apis.put('user/password/update', {newPassword, confirmNewPassword, currentPassword}, {headers: {token: token}});
+export const passwordUpdate = (newPassword, confirmNewPassword, currentPassword, id, token) => async dispatch => {
+    let response = await apis.put(`user/password/update/${id}`, {newPassword, confirmNewPassword, currentPassword}, {headers: {token: token}});
     dispatch({type: 'UPDATE_PASSWORD', payload: response.data});
 }
 
@@ -109,13 +109,13 @@ export const getProgressCrosswords = (id, page) => async dispatch => {
     dispatch({type: 'GET_PROGRESS_CROSSWORDS', payload: response.data});
 }
 
-export const getUnapprovedCrosswords = () => async dispatch => {
-    let response = await apis.get('crossword/u/unapproved');
+export const getUnapprovedCrosswords = (token) => async dispatch => {
+    let response = await apis.get('crossword/u/unapproved', {headers: {token: token}});
     dispatch({type: 'GET_UNAPR', payload: response.data});
 }
 
-export const addCrossword = (values, questions, solution, addedBy) => async dispatch => {
-    let response = await apis.post('crossword/add', {values, questions, solution, addedBy});
+export const addCrossword = (values, questions, solution, addedBy, token) => async dispatch => {
+    let response = await apis.post(`crossword/add/${addedBy}`, {values, questions, solution, addedBy}, {headers: {token: token}});
     dispatch({type: 'ADD_CROSSWORD', payload: response.data});
 }
 
@@ -129,12 +129,17 @@ export const reviewCrossword = (id, rating, token) => async dispatch => {
     dispatch({type: 'REVIEW_CROSSWORD', payload: response.data});
 }
 
-export const saveCrossword = (_id, crossword, token) => async dispatch => {
-    let response = await apis.post(`crossword/tries/save`, {_id, crossword}, {headers: {token: token}})
+export const saveCrossword = (_id, crossword, userId, token) => async dispatch => {
+    let response = await apis.post(`crossword/tries/save/${userId}`, {_id, crossword}, {headers: {token: token}})
     dispatch({type: 'SAVE_CROSSWORD', payload: response.data});
 }
 
-export const solveCrossword = (_id, crossword, token) => async dispatch => {
-    let response = await apis.post(`crossword/solve/${_id}`, {crossword}, {headers: {token: token}});
+export const solveCrossword = (_id, crossword, userId, token) => async dispatch => {
+    let response = await apis.post(`crossword/solve/${userId}/${_id}`, {crossword}, {headers: {token: token}});
     dispatch({type: 'SOLVE_CROSSWORD', payload: response.data})
+}
+
+export const sendMail = (name, email, message) => async dispatch => {
+    let response = await apis.post('mail/send', {name, email, message});
+    dispatch({type: 'SEND_MAIL', payload: response.data});
 }

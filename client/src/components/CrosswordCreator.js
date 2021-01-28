@@ -10,18 +10,14 @@ class CrosswordCreator extends React.Component{
         this.state = {
             across: 4,
             down: 4, 
-            create: false
-        }
-    }
-
-    componentDidMount = () => {
-        let token = getCookie("jwt_access");
-        if(!token) {
-            window.location.replace(`${baseURL}/login`)
+            create: false,
+            error: '',
+            header: 'Select the size of your crossword! Minimum is 4x4 and Maximum is 20x20'
         }
     }
 
     handleChange = e =>{
+        this.setState({error: ''})
         switch(e.target.name) {
             case 'across':
                 this.setState({across: e.target.value})
@@ -34,14 +30,21 @@ class CrosswordCreator extends React.Component{
         }
     }
 
-    handleClick = () => {
+    handleClick = e => {
+        console.log(this.state.across)
+        if(this.state.across > 3 && this.state.across < 21 && this.state.down > 3 && this.state.down < 21) {
         this.setState({create: true})
+        this.setState({header: 'Create your crossword!'})
+        } else {
+            this.setState({error: 'Size of rows and columns should be between 4 and 20!'})
+        }
     }
 
     render() {
 
         const inputs = (
-            <div className="content-container"><div className="form-container">
+            <div className="content-container">
+                <div className="form-container">
                 <label>Down</label><input 
             name="down"
             type="number"
@@ -49,6 +52,7 @@ class CrosswordCreator extends React.Component{
             max="20"
             onChange={this.handleChange}
             value={this.state.down}
+            required
             />
             <label>Across</label>
             <input 
@@ -61,12 +65,13 @@ class CrosswordCreator extends React.Component{
             />
             <button className="form-button"
             name="create"
-            onClick={this.handleClick}>CREATE!</button></div>
+            onClick={this.handleClick}>CREATE</button>
+            {this.state.error}</div>
             </div>
         )
         return(
-            <div className="container">
-            
+            <div className="container flex column">
+                <h2>{this.state.header}</h2>
             {this.state.create ? <Creator across={this.state.across} down={this.state.down}/> : inputs}
             </div>
         )

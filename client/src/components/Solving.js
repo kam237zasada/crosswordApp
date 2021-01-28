@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Blank from './Blank'
 import Message from './Message';
 import RatingForm from './RatingForm'
+import { baseURL } from '../apis'
 
 
 function QuestionsAcross({showRange, questions}) {
@@ -113,9 +114,14 @@ class Solving extends React.Component {
 
     async componentDidMount() {
         let token = getCookie("jwt_access");
+        let id = getCookie('customerID');
         if(token) {
-            await this.props.getUser(token);
+            try {
+            await this.props.getUser(id, token);
             this.setState({token: token})
+            } catch(err) {
+                return window.location.replace(`${baseURL}`)
+            }
         }
         
         try {
@@ -296,9 +302,10 @@ class Solving extends React.Component {
 
     handleSave = async () => {
         let token = getCookie("jwt_access")
+        let id = getCookie('customerID')
         this.setState({error:''})
         try {
-            await this.props.saveCrossword(this.state.crossword_id, this.state.crossword, token);
+            await this.props.saveCrossword(this.state.crossword_id, this.state.crossword, id, token);
             this.showMessage(this.props.crossword)
         } catch(err) {
             this.setState({error: err.response.data})
@@ -307,6 +314,7 @@ class Solving extends React.Component {
 
     handleSolve = async () => {
         let token = getCookie("jwt_access")
+        let id = getCookie('customerID');
         let isEmpty = false;
         this.state.crossword.map( row => {
             row.map(field => {
@@ -320,7 +328,7 @@ class Solving extends React.Component {
         }
         this.setState({error:''})
         try {
-            await this.props.solveCrossword(this.state.crossword_id, this.state.crossword, token);
+            await this.props.solveCrossword(this.state.crossword_id, this.state.crossword, id, token);
             this.showMessage(this.props.crossword)
             setTimeout(function() {
                 window.location.reload();
@@ -362,10 +370,12 @@ class Solving extends React.Component {
                     </table>
                 </div>
             <div className="questions-container">
-                <h4>ACROSS</h4>
+                <div className="margin flex column"><h4 className="questions">ACROSS</h4>
                 <QuestionsAcross showRange={this.showRange} questions={this.state.questions}/>
-                <h4>DOWN</h4>
+                </div>
+                <div className="margin flex column"><h4 className="questions">DOWN</h4>
                 <QuestionsDown showRange={this.showRange} questions={this.state.questions}/>
+                </div>
             </div>
             <div className="solution-container">
                 <table className="table">

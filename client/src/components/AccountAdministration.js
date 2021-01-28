@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getUser } from '../actions';
-import { getUnapprovedCrosswords, getAdmins, manageAdmin, getUserById } from '../actions';
+import { getUnapprovedCrosswords, getAdmins, manageAdmin, getUserById, getUser } from '../actions';
 import { getCookie, getDate } from '../js';
 import AdminForm from './AdminForm';
 import Confirmation from './Confirmation';
@@ -46,10 +45,11 @@ class AccountAdministration extends React.Component {
 
     componentDidMount = async () => {
         let token = getCookie('jwt_access');
+        let id = getCookie('customerID')
     
         if(token) {
             try {
-                await this.props.getUser(token);
+                await this.props.getUser(id, token);
                 if(this.props.user.isAdmin===false) {
                     return window.location.replace(`${baseURL}`)
                 }
@@ -58,7 +58,7 @@ class AccountAdministration extends React.Component {
             }
         }
         try {
-            await this.props.getUnapprovedCrosswords();
+            await this.props.getUnapprovedCrosswords(token);
             await this.props.getAdmins(token);
         this.setState({unapr: this.props.crosswords});
         this.setState({admins: this.props.users})
@@ -110,7 +110,12 @@ class AccountAdministration extends React.Component {
 
     handleDetails = async e => {
         e.preventDefault();
-        await this.props.getUserById(e.target.id);
+        let token = getCookie('jwt_access');
+        try {
+            await this.props.getUserById(e.target.id, token);
+        } catch(err) {
+            return window.location.replace(`${baseURL}`)
+        }
         this.setState({section: ''});
         this.setState({details: true})
         this.setState({fetchedUser: this.props.user})

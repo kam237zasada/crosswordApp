@@ -25,8 +25,9 @@ class ChangePassword extends React.Component {
 
     componentDidMount = async () => {
         let token = getCookie("jwt_access");
+        let id = getCookie('customerID')
         if(token) {
-            await this.props.getUser(token);
+            await this.props.getUser(id, token);
         }
         else {
             window.location.replace(`${baseURL}/login`)
@@ -69,12 +70,13 @@ class ChangePassword extends React.Component {
         e.preventDefault();
         this.setState({error: ''})
         let token = getCookie("jwt_access");
+        let id = getCookie('customerID');
 
         if(this.state.currentPassword==="") {
             return this.showMessage("You must type your current password to approve changes!", true)
         }
         try {
-        await this.props.passwordUpdate(this.state.newPassword, this.state.confirmNewPassword, this.state.currentPassword, token)
+        await this.props.passwordUpdate(this.state.newPassword, this.state.confirmNewPassword, this.state.currentPassword, id, token)
         this.showMessage(this.props.user)
         } catch (err) {
             return this.showMessage(err.response.data, true)

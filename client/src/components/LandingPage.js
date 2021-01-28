@@ -1,9 +1,62 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { sendMail } from '../actions';
+import Message from './Message';
 
 
 class LandingPage extends React.Component{
     constructor(props) {
         super(props)
+        this.state={
+            name: '',
+            email: '',
+            message: '',
+            signsLeft: 1000
+        }
+    }
+
+    handleChange = e => {
+        switch(e.target.name) {
+            case 'name':
+                this.setState({name: e.target.value});
+                break;
+            case 'email':
+                this.setState({email: e.target.value});
+                break;
+            case 'message': 
+                this.setState({message: e.target.value});
+                this.setState({signsLeft: 1000-e.target.value.length})
+                break;
+            default:
+                break;
+        }
+    }
+    showMessage = async (message, isError) => {
+        this.setState({message: message});
+        if(isError) {
+        this.setState({isError: isError})
+        } else {
+        
+        this.setState({isError: false})
+        }
+        this.setState({showMessage: true});
+        setTimeout( () => {
+            this.setState({showMessage: false})
+            this.setState({message: ''})
+        }, 5000);
+    }
+
+    handleMail = async e => {
+        e.preventDefault();
+        try {
+            await this.props.sendMail(this.state.name, this.state.email, this.state.message);
+            this.showMessage(this.props.mail)
+            this.setState({name: ''});
+            this.setState({email: ''});
+            this.setState({message: ''});
+        } catch(err) {
+            this.showMessage(err.response.data, true)
+        }
     }
 
     render() {
@@ -64,6 +117,7 @@ class LandingPage extends React.Component{
                             <h2>Contact us</h2>
                                 <div className="form-field">
                                     <input
+                                    type="text"
                                     name="name"
                                     onChange={this.handleChange}
                                     placeholder="Type your name..."
@@ -71,6 +125,7 @@ class LandingPage extends React.Component{
                                 </div>
                                 <div className="form-field">
                                     <input
+                                    type="email"
                                     name="email"
                                     onChange={this.handleChange}
                                     placeholder="Type your email..."
@@ -83,18 +138,28 @@ class LandingPage extends React.Component{
                                     rows="10"
                                     onChange={this.handleChange}
                                     placeholder="Type your message/question..."
+                                    maxLength="1000"
                                     />
+                                    <>{this.state.signsLeft===1000 ? null : <label className="mini-label">{this.state.signsLeft}</label>}</>
                                 </div>
                             </div>
-                            <button className="form-button">SEND</button>
+                            <button onClick={this.handleMail}className="form-button">SEND</button>
                         </form>
                     </div>
                 </section>                
-
+                {this.state.showMessage ? <Message message={this.state.message} isError={this.state.isError}/> : null}
             </div>
         )
     }
 
 }
 
-export default LandingPage
+const mapStateToProps = (state) => {
+    return { mail: state.mail };
+
+};
+
+export default connect(
+    mapStateToProps,
+    { sendMail }
+    )(LandingPage);

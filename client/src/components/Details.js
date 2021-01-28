@@ -22,7 +22,6 @@ class Details extends React.Component {
             solved: '',
             approved: '',
             rejected:'',
-            showMessage: false,
             message: '',
             showMessage: false,
             isError: false
@@ -31,9 +30,10 @@ class Details extends React.Component {
 
     componentDidMount = async () => {
         let token = getCookie("jwt_access");
+        let id = getCookie('customerID');
         if(token) {
             try {
-            await this.props.getUser(token);
+            await this.props.getUser(id, token);
             } catch(err) {
                 return window.location.replace(`${baseURL}`)
             }
@@ -95,12 +95,13 @@ class Details extends React.Component {
         e.preventDefault();
         this.setState({error: ''})
         let token = getCookie("jwt_access");
+        let id = getCookie('customerID')
 
         if(this.state.currentPassword==="") {
             return this.showMessage("You must type your current password to approve changes!", true)
         }
         try {
-        await this.props.userUpdate(this.state.login, this.state.email, this.state.currentPassword, token)
+        await this.props.userUpdate(this.state.login, this.state.email, this.state.currentPassword, id, token)
         this.showMessage(this.props.user)
         } catch (err) {
             return this.showMessage(err.response.data, true)

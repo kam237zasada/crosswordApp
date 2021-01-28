@@ -6,6 +6,7 @@ const cors = require('cors');
 const app = express();
 const users = require('./routes/users');
 const crosswords = require('./routes/crosswords');
+const mails = require('./routes/mails');
 const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
 const mongoLink = process.env.DBCONNECTION;
@@ -24,7 +25,8 @@ mongoose.connect(mongoLink, { useFindAndModify: false, useNewUrlParser: true,use
 
 app.use(express.json());
 app.use('/user', users);
-app.use('/crossword', crosswords)
+app.use('/crossword', crosswords);
+app.use('/mail', mails);
 
 
 

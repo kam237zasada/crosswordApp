@@ -43,8 +43,9 @@ class AdminForm extends React.Component{
         if(this.state.query=="") {
             return this.showMessage("You must type query condition", true)
         }
+        let token = getCookie('jwt_access');
         try {
-        await this.props.getUsersByQuery(this.state.query)
+        await this.props.getUsersByQuery(this.state.query, token)
         await this.setState({users: this.props.users})
 
         } catch(err) {

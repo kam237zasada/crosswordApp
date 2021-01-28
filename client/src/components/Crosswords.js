@@ -22,6 +22,7 @@ class Crosswords extends React.Component {
 
     componentDidMount = async () => {
         let token = getCookie("jwt_access");
+        let id = getCookie('customerID');
         // try {
             await this.props.getAppCrosswords(token);
         // } catch(err) {
@@ -29,13 +30,13 @@ class Crosswords extends React.Component {
         // }
         if(token) {
         try {
-            await this.props.getUser(token);
+            await this.props.getUser(id, token);
+            this.setState({user: this.props.user})
         } catch(err) {
             setCookie('customerID', "", 0.00001);
             setCookie('jwt_access', "", 0.00001);
             return 
         }
-        this.setState({user: this.props.user})
         }
         this.setState({crosswords: this.props.crosswords})
         const crosswords = this.state.crosswords

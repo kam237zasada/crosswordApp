@@ -22,9 +22,10 @@ class Account extends React.Component {
 
     componentDidMount = async () => {
         let token = getCookie("jwt_access");
+        let id = getCookie('customerID');
         if(token) {
             try {
-                await this.props.getUser(token)
+                await this.props.getUser(id, token)
                 this.setState({user: this.props.user})
                 this.setState({isAdmin: this.props.user.isAdmin});
             } catch(err) {

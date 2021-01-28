@@ -16,8 +16,9 @@ class AccountSettings extends React.Component {
 
     componentDidMount = async () => {
         let token = getCookie("jwt_access")
+        let id = getCookie('customerID')
             try {
-                await this.props.getUser(token)
+                await this.props.getUser(id, token)
             } catch(err) {
                 return window.location.replace(`${baseURL}/login`)
             }

@@ -1,5 +1,4 @@
 const express = require('express');
-const { date } = require('joi');
 const jwt = require('jsonwebtoken');
 const { Crossword, validateAddCrossword } = require('../models/crossword')
 const { User } = require('../models/user');
@@ -14,6 +13,7 @@ getCrossword = async (req, res) => {
 
 getRandomCrossword = async (req, res) => {
     const crosswords = await Crossword.find({isApproved: true});
+    if(crosswords.length===0) { return res.status(404).send('There is no crosswords :(')}
     let maxIndex = crosswords.length-1
 
     let random = 0 + Math.floor((maxIndex - 1) * Math.random());
@@ -103,7 +103,7 @@ getAppCrosswords = async (req, res) => {
 getAddedCrosswords = async (req, res) => {
     let user = await User.findById(req.params.id);
     let page = Number(req.params.page);
-    let limit = 2;
+    let limit = 10;
     let skip = (page-1)*limit;
 
     let allCrosswords = await Crossword.find({"addedBy._id": user._id});
@@ -119,7 +119,7 @@ getAddedCrosswords = async (req, res) => {
 getSolvedCrosswords = async (req, res) => {
     let user = await User.findById(req.params.id);
     let page = Number(req.params.page);
-    let limit = 2;
+    let limit = 10;
     let skip = (page-1)*limit;
 
     let solved = user.solved;
@@ -138,7 +138,7 @@ getSolvedCrosswords = async (req, res) => {
 getProgressCrosswords = async (req, res) => {
     let user = await User.findById(req.params.id);
     let page = Number(req.params.page);
-    let limit = 2;
+    let limit = 10;
     let skip = (page-1)*limit;
 
     let progress = user.tries;
@@ -318,7 +318,7 @@ saveCrossword = async (req, res) => {
 
 solveCrossword = async (req, res) => {
 
-    let crossword = await Crossword.findById(req.params.id);
+    let crossword = await Crossword.findById(req.params.crosswordId);
     let user = "unauthorized"
 
     if(req.headers.token) {
@@ -333,7 +333,7 @@ solveCrossword = async (req, res) => {
     })
     if(isSolved===false) {
         user.solved.push({
-            _id: req.params.id,
+            _id: req.params.crosswordId,
             across: crossword.values.length,
             down: crossword.values[0].length,
             ID: crossword.ID,
@@ -360,11 +360,9 @@ solveCrossword = async (req, res) => {
             _id: user._id,
             dateSolved: Date.now()
         })
-        console.log(user)
         for(let i =0; i<user.tries.length; i++) {
             if(user.tries[i]._id==crossword._id) {
                 user.tries.splice(i, 1)
-                console.log(user.tries)
             }
         }
 

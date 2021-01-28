@@ -3,7 +3,7 @@ import React from 'react';
 export default function RenderNumbers() {
     let i =1
     let array = []
-    while(i<31) {
+    while(i<101) {
         array.push(i)
         i++
     }

@@ -36,9 +36,10 @@ class AccountCrosswords extends React.Component {
 
     componentDidMount = async () => {
         let token = getCookie("jwt_access")
+        let id = getCookie('customerID')
         if(token) {
             try {
-                await this.props.getUser(token)
+                await this.props.getUser(id, token)
             } catch(err) {
                 return window.location.replace(`${baseURL}/login`)
             }
@@ -58,13 +59,13 @@ class AccountCrosswords extends React.Component {
         await this.setState({progressCrosswords: this.props.crosswords.crosswords})
         await this.setState({prCrL: this.props.crosswords.length})
 
-        if(this.state.addedSite * 2 >= this.state.addCrL) {
+        if(this.state.addedSite * 10 >= this.state.addCrL) {
             this.setState({lastSiteAdded: true})
         }
-        if(this.state.solvedSite * 2 >= this.state.slvCrL) {
+        if(this.state.solvedSite * 10 >= this.state.slvCrL) {
             this.setState({lastSiteSolved: true})
         }
-        if(this.state.progressSite * 2 >= this.state.prCrL) {
+        if(this.state.progressSite * 10 >= this.state.prCrL) {
             this.setState({lastSiteProgress: true})
         }
 
@@ -131,7 +132,7 @@ class AccountCrosswords extends React.Component {
                 await this.props.getSolvedCrosswords(this.state.user._id, this.state.solvedSite)
                 this.setState({solvedCrosswords: this.props.crosswords.crosswords})
                 this.setState({slvCrL: this.props.crosswords.length})
-                if(this.state.solvedSite * 2 >= this.state.slvCrL) {
+                if(this.state.solvedSite * 10 >= this.state.slvCrL) {
                     this.setState({lastSiteSolved: true})
                 } else {
                     this.setState({lastSiteSolved: false})
@@ -154,7 +155,7 @@ class AccountCrosswords extends React.Component {
                     await this.props.getProgressCrosswords(this.state.user._id, this.state.progressSite)
                     this.setState({progressCrosswords: this.props.crosswords.crosswords})
                     this.setState({prCrL: this.props.crosswords.length})
-                    if(this.state.progressSite * 2 >= this.state.prCrL) {
+                    if(this.state.progressSite * 10 >= this.state.prCrL) {
                         this.setState({lastSiteProgress: true})
                     } else {
                         this.setState({lastSiteProgress: false})

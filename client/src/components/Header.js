@@ -1,8 +1,9 @@
 import React from 'react';
-import { getCookie } from '../js/index';
+import { getCookie, setCookie } from '../js/index';
 import { connect } from 'react-redux';
 import { getUser, userSignOut, getRandomCrossword } from '../actions';
 import { baseURL } from '../apis';
+import Message from './Message'
 
 const Profile = ({user, enter, leave, signOut}) => {
     if(!user.login) {
@@ -32,12 +33,15 @@ class Header extends React.Component {
 
     async componentDidMount() {
         const token = getCookie("jwt_access");
+        const id = getCookie('customerID')
         if(token) {
         try {
-            await this.props.getUser(token)
+            await this.props.getUser(id, token)
             this.setState({user: this.props.user});
         } catch(err) {
-            console.log(err)
+            setCookie('customerID', "", 0.00001);
+            setCookie('jwt_access', "", 0.00001);
+            return window.location.replace(`${baseURL}`)
         }
     }
         this.setState({loaded: true})
@@ -58,9 +62,28 @@ class Header extends React.Component {
 
     }
 
+    showMessage = async (message, isError) => {
+        this.setState({message: message});
+        if(isError) {
+        this.setState({isError: isError})
+        } else {
+        
+        this.setState({isError: false})
+        }
+        this.setState({showMessage: true});
+        setTimeout( () => {
+            this.setState({showMessage: false})
+            this.setState({message: ''})
+        }, 5000);
+    }
+
     getRandom = async () => {
+        try {
         await this.props.getRandomCrossword();
         window.location.replace(`${baseURL}/crosswords/${this.props.crossword.ID}`)
+        } catch(err) {
+            this.showMessage(err.response.data, true)
+        }
     }
 
     handleSignOut = async () => {
@@ -76,7 +99,8 @@ class Header extends React.Component {
                 <a name="crosswords" href="/crosswords"><div name="crosswords" onMouseLeave={this.handleLeave} onMouseEnter={this.handleEnter} className="header-element"><i name="crosswords" className="fas fa-chess-board"></i><div name="crosswords" id="text-crosswords">Crosswords</div></div></a>
                 <a name="about" href="/about"><div name="about" onMouseLeave={this.handleLeave} onMouseEnter={this.handleEnter}className="header-element"><i name="about" className="fas fa-question"></i><div name="about" id="text-about">About</div></div></a>
                 <Profile user={this.state.user} enter={this.handleEnter} leave={this.handleLeave} signOut={this.handleSignOut}/>
-            </div> : null}</>
+            </div> : null}
+            {this.state.showMessage ? <Message message={this.state.message} isError={this.state.isError}/> : null}</>
         )
     }
 }

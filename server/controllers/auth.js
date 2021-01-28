@@ -36,11 +36,11 @@ verifyUser = (req, res, next) => {
 }
 
 tokenVerifyAdmin = (req, res, next) => {
-    console.log(req.headers.token)
-    if (!req.headers.token) { 
+    let token = req.headers.token
+    if(!token) { token = req.body.token};
+    if (!token) { 
         return res.status(401).send('Not authorized!'); 
     } 
-    const token = req.headers.token;
     jwt.verify(token, TOKEN_SECRET, function(err) { 
         if (err) { 
             return res.status(401).send("Wrong authorization!")

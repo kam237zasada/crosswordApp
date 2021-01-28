@@ -4,8 +4,7 @@ import { addCrossword, getUser } from '../actions';
 import { getCookie, compareNumbers } from '../js';
 import { baseURL } from '../apis'
 import RenderNumbers from './RenderNumbers'
-import HelpCreator from './HelpCreator'
-
+import Message from './Message';
 
 function QuestionsAcross({questions, handleDelete}) {
     return questions.map( question => {
@@ -121,17 +120,25 @@ class Creator extends React.Component {
             addQuestion: true,
             solution: [],
             userId: '',
-            showHelp: false
+            showHelp: false,
+            message: '',
+            showMessage: false
         }
     }
 
     componentDidMount = async () => {
         let token = getCookie("jwt_access");
+        let id = getCookie('customerID')
 
+        if(token) {
         try {
-            await this.props.getUser(token);
+            await this.props.getUser(id, token);
         } catch(err) {
             return window.location.replace(`${baseURL}/login`)
+        }
+        } else {
+            return window.location.replace(`${baseURL}/login`)
+
         }
         if(this.props.user) {
         let crossWord = []
@@ -149,9 +156,7 @@ class Creator extends React.Component {
                     questionRange: []}
                 }
         }
-
-        let userId = getCookie("customerID");
-        this.setState({userId: userId});
+        this.setState({userId: id});
         this.setState({crossWord: crossWord})
     } else {
         window.location.replace(`${baseURL}/login`)
@@ -168,7 +173,6 @@ class Creator extends React.Component {
             })
         });
         await this.setState({crossWord: crossword})
-        console.log(this.state.crossWord)
 
     }
 
@@ -251,14 +255,32 @@ class Creator extends React.Component {
         })
     }
 
+    showMessage = async (message, isError) => {
+        this.setState({message: message});
+        if(isError) {
+        this.setState({isError: isError})
+        } else {
+        
+        this.setState({isError: false})
+        }
+        this.setState({showMessage: true});
+        setTimeout( () => {
+            this.setState({showMessage: false})
+            this.setState({message: ''})
+        }, 5000);
+    }
+
     save = async () => {
+        let error = false;
         this.state.crossWord.map( column => {
             column.map( field => {
                 if (field.value==="") {
-                    return this.setState({error: "Wszystkie pola muszą zostać wypełnione!"})
+                    error = true;
+                    return this.showMessage('All fields must be filled!', true)
                 }
             })
         })
+        if(!error) {
         let array = [];
         this.state.crossWord.map(column => {
             column.map( field => {
@@ -275,10 +297,13 @@ class Creator extends React.Component {
 
 
         try {
-        await this.props.addCrossword(this.state.crossWord, this.state.questions, array, this.state.userId )
+            let token = getCookie('jwt_access');
+            await this.props.addCrossword(this.state.crossWord, this.state.questions, array, this.state.userId, token )
+            return this.showMessage(this.props.crossword)
         } catch (err) {
-            return this.setState({error: err.response.data})
+            return this.showMessage(err.response.data, true)
         }
+    }
     }
 
     handleClick = e => {
@@ -288,9 +313,7 @@ class Creator extends React.Component {
         if(this.state.blank) {
             for ( let item of field.childNodes) {
                 let value = item.attributes.class.value.split(' ')
-                console.log(value)
                 if(item.tagName==="INPUT" && !value.includes("disabled")) {
-                    console.log("enabled")
 
                     item.setAttribute("class", "field disabled")
                     item.style.backgroundColor="black"
@@ -301,11 +324,11 @@ class Creator extends React.Component {
                                 element.value="blank";
                                 element.question="";
                                 element.password="";
+                                element.questionRange=[]
                             }
                         })
                     }
                 } else if(item.tagName==="INPUT" && value.includes("disabled")) {
-                    console.log("disabled")
                     item.removeAttribute('disabled')
                     item.setAttribute("class", "field")
                     item.style.backgroundColor="white";
@@ -467,6 +490,27 @@ class Creator extends React.Component {
             }
         })
 
+        let range;
+        if(e.type==='across') {
+            range = 'A'+e.number
+        } else {
+            range='D'+e.number
+        }
+
+
+        let crossword = this.state.crossWord;
+
+        crossword.map(row => {
+            row.map(field => {
+                if(field.questionRange.includes(range)) {
+                    let index = field.questionRange.indexOf(range);
+                    field.questionRange.splice(index,1);
+                }
+            })
+        })
+        this.setState({crossWord: crossword})
+
+
         this.setState({questions:questions})
     }
 
@@ -475,10 +519,6 @@ class Creator extends React.Component {
         const mask = document.getElementById("mask");
         mask.remove()
 
-    }
-
-    handleSolution = e => {
-        console.log("e");
     }
 
     showHelp = () => {
@@ -511,7 +551,7 @@ class Creator extends React.Component {
 
         return  (
 
-        <div className="content">
+        <div className="content flex column">
         <div className="table-container">
         <button className="form-button" onClick={this.showHelp}>HELP</button>
             <div className="edit-panel-container">
@@ -549,10 +589,12 @@ class Creator extends React.Component {
                 </div> : null}
             </div>
             <div className="questions-container">
-                <div>ACROSS</div>
+                <div className="margin flex column"><h4 className="questions">ACROSS</h4>
                 <QuestionsAcross questions={this.state.questions} handleDelete={this.handleDeleteQuestion}/>
-                <div>DOWN</div>
+                </div>
+                <div className="margin flex column"><h4 className="questions">DOWN</h4>
                 <QuestionsDown questions={this.state.questions} handleDelete={this.handleDeleteQuestion}/>
+                </div>
             </div>
             <div className="solution-container">
                 <table className="table">
@@ -561,10 +603,11 @@ class Creator extends React.Component {
                     </tbody>
                 </table>
             </div>
-            <button className="form-button" onClick={this.save}>SAVE</button>
+            <button className="form-button" onClick={this.save}>SEND CROSSWORD!</button>
             {this.state.error}
         </div>
         {this.state.showHelp ? showHelp : null}
+        {this.state.showMessage ? <Message message={this.state.message} isError={this.state.isError}/> : null}
         </div>
         )
     }
