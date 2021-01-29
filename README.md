@@ -46,7 +46,8 @@ To launch app on your local computer, you have to execute undermentioned steps^^
 4. Install all dependencies -> ``$ npm i`` or ``$ npm install``
 5. Run app on localhost:8000 -> ``$ npm start`` (it should open Web Browser automatically)
 6. Open another terminal directly inside server directory in project (crosswordApp/server)
-7. Run server on localhost:3000 -> ``$ node index.js``
+7. Install all dependencies -> ``$ npm i`` or ``$ npm install``
+8. Run server on localhost:3000 -> ``$ node index.js``
 
 ^ Here you have credentials for example existing user:
 ``login: player123``
