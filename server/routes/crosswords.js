@@ -12,7 +12,7 @@ router.get('/solvedby/:id/:page', crosswordController.getSolvedCrosswords);
 router.get('/inprogress/:id/:page', crosswordController.getProgressCrosswords)
 router.post('/add/:id', verifyUser, crosswordController.addCrossword)
 router.post('/tries/save/:id', verifyUser, crosswordController.saveCrossword);
-router.post('/solve/:id/:crosswordId', verifyUser, crosswordController.solveCrossword);
+router.post('/solve/:crosswordId', crosswordController.solveCrossword);
 router.post('/approve/:id', tokenVerifyAdmin, crosswordController.approveCrossword);
 router.post('/review/:id', crosswordController.reviewCrossword)
 router.put('/try/:id', crosswordController.addTry)

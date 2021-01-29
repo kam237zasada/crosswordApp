@@ -29,6 +29,7 @@ sendMail = async (req, res) => {
         }
     },
     function (error, response, body) {
+        console.log(error)
         res.send('Message sent!')
     }
     )

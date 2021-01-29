@@ -95,9 +95,9 @@ class Header extends React.Component {
 
         return(
             <>{this.state.loaded ? <div className="header-container">
+                <a name="home" href="/"><div name="home" onMouseLeave={this.handleLeave} onMouseEnter={this.handleEnter}className="header-element"><i name="home" className="fas fa-home"></i><div name="home" id="text-home">Home</div></div></a>
                 <a name="random" onClick={this.getRandom}><div name="random" onMouseLeave={this.handleLeave} onMouseEnter={this.handleEnter}className="header-element"><i name="random" className="fas fa-dice"></i><div name="random" id="text-random">Random</div></div></a>
                 <a name="crosswords" href="/crosswords"><div name="crosswords" onMouseLeave={this.handleLeave} onMouseEnter={this.handleEnter} className="header-element"><i name="crosswords" className="fas fa-chess-board"></i><div name="crosswords" id="text-crosswords">Crosswords</div></div></a>
-                <a name="about" href="/about"><div name="about" onMouseLeave={this.handleLeave} onMouseEnter={this.handleEnter}className="header-element"><i name="about" className="fas fa-question"></i><div name="about" id="text-about">About</div></div></a>
                 <Profile user={this.state.user} enter={this.handleEnter} leave={this.handleLeave} signOut={this.handleSignOut}/>
             </div> : null}
             {this.state.showMessage ? <Message message={this.state.message} isError={this.state.isError}/> : null}</>

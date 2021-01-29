@@ -134,8 +134,8 @@ export const saveCrossword = (_id, crossword, userId, token) => async dispatch =
     dispatch({type: 'SAVE_CROSSWORD', payload: response.data});
 }
 
-export const solveCrossword = (_id, crossword, userId, token) => async dispatch => {
-    let response = await apis.post(`crossword/solve/${userId}/${_id}`, {crossword}, {headers: {token: token}});
+export const solveCrossword = (_id, crossword, token) => async dispatch => {
+    let response = await apis.post(`crossword/solve/${_id}`, {crossword}, {headers: {token: token}});
     dispatch({type: 'SOLVE_CROSSWORD', payload: response.data})
 }
 

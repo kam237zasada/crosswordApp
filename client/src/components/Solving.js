@@ -314,7 +314,6 @@ class Solving extends React.Component {
 
     handleSolve = async () => {
         let token = getCookie("jwt_access")
-        let id = getCookie('customerID');
         let isEmpty = false;
         this.state.crossword.map( row => {
             row.map(field => {
@@ -328,7 +327,7 @@ class Solving extends React.Component {
         }
         this.setState({error:''})
         try {
-            await this.props.solveCrossword(this.state.crossword_id, this.state.crossword, id, token);
+            await this.props.solveCrossword(this.state.crossword_id, this.state.crossword, token);
             this.showMessage(this.props.crossword)
             setTimeout(function() {
                 window.location.reload();
@@ -360,7 +359,7 @@ class Solving extends React.Component {
     render() {
 
         const content = (
-            <div className="content">
+            <div className="flex column">
                 <h2 className="crossword-header">Crossword #{this.state.crosswordID}</h2>
                 <div className="table-container">
                     <table className="table">
@@ -369,6 +368,7 @@ class Solving extends React.Component {
                         </tbody>
                     </table>
                 </div>
+                <div className="under-table-container">
             <div className="questions-container">
                 <div className="margin flex column"><h4 className="questions">ACROSS</h4>
                 <QuestionsAcross showRange={this.showRange} questions={this.state.questions}/>
@@ -376,6 +376,7 @@ class Solving extends React.Component {
                 <div className="margin flex column"><h4 className="questions">DOWN</h4>
                 <QuestionsDown showRange={this.showRange} questions={this.state.questions}/>
                 </div>
+            </div>
             </div>
             <div className="solution-container">
                 <table className="table">

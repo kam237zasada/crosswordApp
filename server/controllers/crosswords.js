@@ -324,6 +324,7 @@ solveCrossword = async (req, res) => {
     if(req.headers.token) {
         const encoded = jwt.decode(req.headers.token);
         user = await User.findById(encoded.sub);
+        if(!user) { return res.status(404).send('Do not test me Mr Hacker :) Please sign out and sign in again!')}
 
         let isSolved = false
         user.solved.map( solve => {

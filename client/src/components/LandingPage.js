@@ -11,6 +11,7 @@ class LandingPage extends React.Component{
             name: '',
             email: '',
             message: '',
+            emailMessage: '',
             signsLeft: 1000
         }
     }
@@ -23,8 +24,8 @@ class LandingPage extends React.Component{
             case 'email':
                 this.setState({email: e.target.value});
                 break;
-            case 'message': 
-                this.setState({message: e.target.value});
+            case 'emailMessage': 
+                this.setState({emailMessage: e.target.value});
                 this.setState({signsLeft: 1000-e.target.value.length})
                 break;
             default:
@@ -49,13 +50,14 @@ class LandingPage extends React.Component{
     handleMail = async e => {
         e.preventDefault();
         try {
-            await this.props.sendMail(this.state.name, this.state.email, this.state.message);
+            await this.props.sendMail(this.state.name, this.state.email, this.state.emailMessage);
             this.showMessage(this.props.mail)
             this.setState({name: ''});
             this.setState({email: ''});
-            this.setState({message: ''});
+            this.setState({emailMessage: ''});
         } catch(err) {
-            this.showMessage(err.response.data, true)
+            console.log(err)
+            // this.showMessage(err.response.data, true)
         }
     }
 
@@ -133,7 +135,7 @@ class LandingPage extends React.Component{
                                 </div>
                                 <div className="form-field">
                                     <textarea
-                                    name="message"
+                                    name="emailMessage"
                                     cols="40"
                                     rows="10"
                                     onChange={this.handleChange}
