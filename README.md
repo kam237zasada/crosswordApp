@@ -14,6 +14,8 @@ Do you like solving crosswords? Do you like creating crosswords? Don't you want 
 Here you can create your own crossword from scratch and share it with people all over the world, solve crosswords made by other users. Everything is under admin's supervision, who is responsible for crosswords correctness. 
 Just create an account and start crosswording!
 
+IMPORTANT - App is not fully adjusted for mobiles!
+
 
 ### Technologies
 
