@@ -4,7 +4,6 @@
 * [General Info](#general-info)
 * [Technologies](#technologies)
 * [Setup](#setup)
-* [Walkthrough](#walkthrough)
 * [Resources](#resources)
 
 ### General info
