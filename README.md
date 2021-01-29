@@ -36,7 +36,7 @@ Just create an account and start crosswording!
 
 ### Setup
 
-If you want to launch this application just go to <a href='https://krulikos-crosswords-app.web.app'>DEMO</a> site! ^
+If you want to launch this application just go to <a href='https://krulikos-crosswords-app.web.app'>DEMO</a> site! ^<br>
 To launch app on your local computer, you have to execute undermentioned steps^^^: 
 1. Open terminal and make sure you have installed npm and node.js on your local machine -> ``$ npm -v`` and ``$ node -v`` (this commands check versions of npm and node.js
 2. Clone this repository -> ``$ git clone https://github.com/kam237zasada/crosswordApp.git``
@@ -48,8 +48,8 @@ To launch app on your local computer, you have to execute undermentioned steps^^
 
 ^ Here you have credentials for example existing user:
 ``login: player123``
-``password: password123``
-^^ If you want to sign as Admin, to see how looks from Admin's point of view, don't wait and just write to me.
+``password: password123``<br>
+^^ If you want to sign as Admin, to see how looks from Admin's point of view, don't wait and just write to me.<br>
 ^^^ Some features would not be working because of environment variables which have to be hide. If you want to see full performance of application see <a href='https://krulikos-crosswords-app.web.app'>DEMO</a>. 
 
 
