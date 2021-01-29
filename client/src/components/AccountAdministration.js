@@ -26,7 +26,8 @@ class AccountAdministration extends React.Component {
             fetchedUser: {},
             details: false,
             userDateCr: '',
-            isError: false
+            isError: false,
+            adminsError: ''
         }
     }
 
@@ -59,12 +60,17 @@ class AccountAdministration extends React.Component {
         }
         try {
             await this.props.getUnapprovedCrosswords(token);
-            await this.props.getAdmins(token);
         this.setState({unapr: this.props.crosswords});
-        this.setState({admins: this.props.users})
         } catch (err) {
             this.setState({empty: err.response.data})
         }
+
+        try {
+            await this.props.getAdmins(token);
+            this.setState({admins: this.props.users})
+        } catch (err) {
+        this.setState({adminsError: err.response.data})
+    }
 
     }
 
@@ -215,7 +221,7 @@ class AccountAdministration extends React.Component {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {this.renderAdmins(this.handleConfirm, this.handleDetails)}
+                                <>{this.state.adminsError==='' ? <>{this.renderAdmins(this.handleConfirm, this.handleDetails)}</> : <>{this.state.adminsError}</>} </>
                                 </tbody>
                     </table>
                 </div> 

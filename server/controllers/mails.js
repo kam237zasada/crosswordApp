@@ -22,19 +22,17 @@ sendMail = async (req, res) => {
             },
             'subject': `Contact from ${req.body.name} to Crossword App`,
             'html':`<p>${req.body.message}</p>`,
-            'smtp_account': '1.torebkowamania.smtp',
+            'smtp_account': '1.kam237zasada.smtp',
             'from_name': 'Crossword App',
             'from': 'admin@crossword-app.pl',
             'reply_to': req.body.email
         }
     },
     function (error, response, body) {
-        console.log(error)
         res.send('Message sent!')
     }
     )
 } catch(err) {
-    console.log(err)
     return res.status(500).send("Oops. Something goes wrong.")
 }
 }

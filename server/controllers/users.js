@@ -115,7 +115,7 @@ addUser = async (req, res) => {
             },
             'subject': `Welcome in Crossword's world!`,
             'html':templates.activationMail({login: newUser.login, _id: newUser._id, token: token }),
-            'smtp_account': '1.torebkowamania.smtp',
+            'smtp_account': '1.kam237zasada.smtp',
             'from': 'admin@crossword-app.pl',
             'from_name': 'Crossword App'
         }
@@ -207,7 +207,7 @@ resendActivation = async (req, res) => {
             },
             'subject': `Welcome in Crossword's world!`,
             'html':templates.activationMail({login: user.login, _id: user._id, token: token }),
-            'smtp_account': '1.torebkowamania.smtp',
+            'smtp_account': '1.kam237zasada.smtp',
             'from': 'admin@crossword-app.pl',
             
         }
@@ -241,7 +241,7 @@ passwordReminder = async (req, res) => {
                 },
                 'subject': `Password reset`,
                 'html':templates.passwordReset({_id: user._id, token: token }),
-                'smtp_account': '1.torebkowamania.smtp',
+                'smtp_account': '1.kam237zasada.smtp',
                 'from': 'admin@crossword-app.pl',
                 'from_name': 'Crossword App'
             }
