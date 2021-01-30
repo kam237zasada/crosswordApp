@@ -5,7 +5,7 @@ const request = require('request');
 const { generateToken } = require('./auth');
 const { User, validateUser, validatePassword, validateDetails } = require('../models/user')
 const { Crossword } = require('../models/crossword')
-const { appKey, secretKey } = require('../config/index');
+const { appKey, secretKey, smtpAccount } = require('../config/index');
 const templates = require('../templates');
 
 
@@ -115,7 +115,7 @@ addUser = async (req, res) => {
             },
             'subject': `Welcome in Crossword's world!`,
             'html':templates.activationMail({login: newUser.login, _id: newUser._id, token: token }),
-            'smtp_account': '1.kam237zasada.smtp',
+            'smtp_account': smtpAccount,
             'from': 'admin@crossword-app.pl',
             'from_name': 'Crossword App'
         }
@@ -207,8 +207,9 @@ resendActivation = async (req, res) => {
             },
             'subject': `Welcome in Crossword's world!`,
             'html':templates.activationMail({login: user.login, _id: user._id, token: token }),
-            'smtp_account': '1.kam237zasada.smtp',
+            'smtp_account': smtpAccount,
             'from': 'admin@crossword-app.pl',
+            'from_name': 'Crossword App'
             
         }
     },
@@ -241,7 +242,7 @@ passwordReminder = async (req, res) => {
                 },
                 'subject': `Password reset`,
                 'html':templates.passwordReset({_id: user._id, token: token }),
-                'smtp_account': '1.kam237zasada.smtp',
+                'smtp_account': smtpAccount,
                 'from': 'admin@crossword-app.pl',
                 'from_name': 'Crossword App'
             }

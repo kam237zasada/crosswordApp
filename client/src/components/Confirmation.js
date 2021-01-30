@@ -1,7 +1,5 @@
 import React from 'react'
 
-
-
 function Confirmation({user, handleChange, handleConfirm, handleClose}) {
     return (
         <div className="confirmation-container">

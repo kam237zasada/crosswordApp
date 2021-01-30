@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { connect } from 'react-redux';
 import { getUser, passwordUpdate } from '../actions';
 import { getCookie } from '../js'

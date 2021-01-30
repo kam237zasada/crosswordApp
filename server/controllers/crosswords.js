@@ -227,7 +227,6 @@ approveCrossword = async (req, res) => {
     let id = crossword._id.toString()
 
     let user = await User.findById(crossword.addedBy._id);
-    console.log(user)
 
     const decoded = jwt.decode(req.body.token);
 
@@ -255,7 +254,6 @@ approveCrossword = async (req, res) => {
             await user.save();
             res.send("Crossword approved")
         } catch (err) {
-            console.log(err)
             return res.status(500).send("Oops. Something goes wrong!")
         }
     } else if(req.body.action==="reject") {
@@ -433,7 +431,6 @@ reviewCrossword = async (req, res) => {
         res.status(200).send("Crossword rating added sucesfully");
     } catch(err) {
         res.status(500).send("Oops. something goes wrong");
-        console.log(err)
     }
 }
 

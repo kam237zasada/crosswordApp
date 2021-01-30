@@ -56,8 +56,7 @@ class LandingPage extends React.Component{
             this.setState({email: ''});
             this.setState({emailMessage: ''});
         } catch(err) {
-            console.log(err)
-            // this.showMessage(err.response.data, true)
+            this.showMessage(err.response.data, true)
         }
     }
 

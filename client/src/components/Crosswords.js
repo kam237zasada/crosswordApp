@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { getAppCrosswords, getUser } from '../actions';
 import { getCookie, setCookie } from '../js';
 import CrByType from './CrByType';
-import { baseURL } from '../apis'
 
 class Crosswords extends React.Component {
     constructor(props) {
@@ -23,11 +22,11 @@ class Crosswords extends React.Component {
     componentDidMount = async () => {
         let token = getCookie("jwt_access");
         let id = getCookie('customerID');
-        // try {
+        try {
             await this.props.getAppCrosswords(token);
-        // } catch(err) {
-        //     return this.setState({error: err.response.data})
-        // }
+        } catch(err) {
+            return this.setState({error: err.response.data})
+        }
         if(token) {
         try {
             await this.props.getUser(id, token);
@@ -52,11 +51,9 @@ class Crosswords extends React.Component {
                             isSolved=false
                         if(crossword._id==solved._id) {
                             isSolved=true
-                            console.log(solved._id + " " + crossword._id)
 
                         }
                         if(isSolved===true) {
-                            console.log(crossword._id)
                             crossword.solved=true;
                         } else {
                             if(crossword.solved!==true) {
@@ -80,10 +77,6 @@ class Crosswords extends React.Component {
     
     }
 
-    crosswords = (crosswords) => {
-        console.log(crosswords)
-        
-    }
 
     handleBack = () => {
         this.setState({current: []})
@@ -91,7 +84,6 @@ class Crosswords extends React.Component {
     }
 
     handleClick = async e => {
-        console.log("click")
         switch(e.target.id) {
             case "Beginner":
                 await this.setState({current: this.state.beginner});

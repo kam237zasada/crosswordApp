@@ -314,10 +314,8 @@ class CrosswordAdmin extends React.Component {
     handleView = () => {
         if(this.state.solution) {
             this.setState({solution: false});
-            console.log("false")
         } else {
             this.setState({solution: true})
-            console.log("true")
         }
     }
 

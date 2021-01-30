@@ -361,8 +361,6 @@ class Creator extends React.Component {
             let buttons = Array.from(document.getElementsByClassName("edit-button"));
             buttons.map( button => {
                 button.setAttribute("class", "edit-button")
-                // button.style.backgroundColor="white";
-                // button.style.color="#1665CD";
             })
             return
         } else {
@@ -466,11 +464,6 @@ class Creator extends React.Component {
         this.setState({questions: questions});
         this.setState({crossWord: crossword})
         this.setState({questionForm: false})
-        
-        // array.map(element => {
-        //     element.checked=false
-        //     element.style.visibility="hidden"
-        // })
         
     } else return
 

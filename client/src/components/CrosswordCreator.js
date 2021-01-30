@@ -1,8 +1,5 @@
 import React from 'react';
 import Creator from './Creator'
-import { getCookie } from '../js';
-import { baseURL } from '../apis';
-
 
 class CrosswordCreator extends React.Component{
     constructor(props) {
@@ -30,8 +27,7 @@ class CrosswordCreator extends React.Component{
         }
     }
 
-    handleClick = e => {
-        console.log(this.state.across)
+    handleClick = () => {
         if(this.state.across > 3 && this.state.across < 21 && this.state.down > 3 && this.state.down < 21) {
         this.setState({create: true})
         this.setState({header: 'Create your crossword!'})

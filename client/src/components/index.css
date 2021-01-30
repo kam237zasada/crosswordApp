@@ -6,8 +6,8 @@
 :root {
     --first-blue: #1665CD;
     --second-blue: #104B98;
+    animation: root 2s;
 }
-
 
 
 * {
@@ -493,18 +493,18 @@ a:hover {
     border: 2px solid var(--second-blue);
     background-color: var(--first-blue);
     color: white;
-    /* -webkit-animation: message 5s; */
+    -webkit-animation: message 5s;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* @keyframes message {
+@keyframes message {
     0% {right: 120%; opacity: 100%;}
     25% {right: 2%; opacity: 100%;}
     50% {right: 2%; opacity: 100%;}
     100% {right: 2%; opacity: 0%;}
-} */
+}
 
 .message-error {
     border: red;

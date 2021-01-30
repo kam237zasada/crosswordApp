@@ -1,5 +1,5 @@
 const { validateMail } = require('../models/mail');
-const { appKey, secretKey } = require('../config/index');
+const { appKey, secretKey, smtpAccount } = require('../config/index');
 const request = require('request')
 
 
@@ -22,7 +22,7 @@ sendMail = async (req, res) => {
             },
             'subject': `Contact from ${req.body.name} to Crossword App`,
             'html':`<p>${req.body.message}</p>`,
-            'smtp_account': '1.kam237zasada.smtp',
+            'smtp_account': smtpAccount,
             'from_name': 'Crossword App',
             'from': 'admin@crossword-app.pl',
             'reply_to': req.body.email

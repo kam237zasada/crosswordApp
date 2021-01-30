@@ -1,6 +1,5 @@
 import apis from '../apis/index';
 import { setCookie } from '../js';
-import { baseURL } from '../apis'
 
 export const getUser = (id, token) => async dispatch => {
     let response = await apis.get(`user/singleuser/${id}`, {headers: {token: token}});
